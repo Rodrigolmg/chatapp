@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -70,6 +71,8 @@ class TextComposer extends StatefulWidget {
 }
 
 class _TextComposerState extends State<TextComposer> {
+  bool _isComposing = false;
+
   @override
   Widget build(BuildContext context) {
     return IconTheme(
@@ -93,7 +96,26 @@ class _TextComposerState extends State<TextComposer> {
             Expanded(
               child: TextField(
                 decoration: InputDecoration.collapsed(hintText: "Send a message"),
+                onChanged: (text){
+                  setState(() {
+                    _isComposing = text.length > 0;
+                  });
+                },
               ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Theme.of(context).platform == TargetPlatform.iOS
+                  ? CupertinoButton(
+                      child: Text("Send"),
+                      onPressed: _isComposing ? (){} : null,
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: _isComposing
+                          ? (){}
+                          : null
+                    ),
             ),
           ],
         ),
@@ -101,6 +123,26 @@ class _TextComposerState extends State<TextComposer> {
     );
   }
 }
+
+class ChatMessage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      child: Row(
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(""),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 
 
